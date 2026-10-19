@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101d35">
+  <title>COLAW Fantasy | Juris League</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f5f9;
+      color: #15233d;
+    }
+    header {
+      background: #101d35;
+      color: white;
+      padding: 22px 18px;
+      border-bottom: 4px solid #d7b568;
+    }
+    .brand {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .brand span { color: #e4c77e; }
+    header p { color: #c5ccda; margin-bottom: 0; }
+    main {
+      max-width: 760px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #152b4a, #176449);
+      color: white;
+      border-radius: 16px;
+      padding: 28px 22px;
+    }
+    .hero small {
+      color: #e4c77e;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    h1 { font-size: 30px; margin: 12px 0; }
+    .hero p { line-height: 1.6; color: #e1e9e8; }
+    .button {
+      display: inline-block;
+      background: #e4c77e;
+      color: #15233d;
+      padding: 13px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 8px;
+    }
+    .section-title { margin: 28px 0 14px; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: white;
+      border: 1px solid #e0e5ed;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .card .emoji { font-size: 25px; }
+    .card h3 { margin: 12px 0 6px; }
+    .card p { font-size: 14px; line-height: 1.5; color: #657187; }
+    footer {
+      text-align: center;
+      color: #778196;
+      padding: 28px 16px;
+      font-size: 13px;
+    }
+    @media (max-width: 440px) {
+      .cards { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">COLAW <span>FANTASY</span></div>
+    <p>JURIS LEAGUE · SEASON 2026</p>
+  </header>
+
+  <main>
+    <section class="hero">
+      <small>YOUR COLLEGE. YOUR LEAGUE.</small>
+      <h1>Welcome to COLAW Fantasy.</h1>
+      <p>
+        Build your dream squad, choose your captain,
+        earn fantasy points and compete with your
+        fellow law students for the top spot.
+      </p>
+      <a class="button" href="#features">Explore the League ↓</a>
+    </section>
+
+    <h2 class="section-title" id="features">The Fantasy Experience</h2>
+    <section class="cards">
+      <article class="card">
+        <div class="emoji">⚽</div>
+        <h3>Pick Your Squad</h3>
+        <p>Choose players from the clubs competing in the COLAW JURIS LEAGUE.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">👑</div>
+        <h3>Choose Your Captain</h3>
+        <p>Back your star player and make every gameweek count.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">🏆</div>
+        <h3>Global Leaderboard</h3>
+        <p>Compete against classmates and climb the fantasy rankings.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">📊</div>
+        <h3>Track Your Points</h3>
+        <p>Follow your weekly scores and season performance.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    COLAW FANTASY · An unofficial fantasy game for COLAW JURIS LEAGUE.
+  </footer>
+</body>
+</html>
