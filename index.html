@@ -129,7 +129,56 @@
     COLAW FANTASY · An unofficial fantasy game for COLAW JURIS LEAGUE.
   </footer>
 
-<script type="module">
+
+<!-- COLAW Fantasy student access -->
+<section id="student-access" style="max-width:600px;margin:30px auto;padding:24px;background:white;border-radius:16px;box-shadow:0 4px 18px #0001;">
+  <h2 style="color:#101d35;">Student Access</h2>
+  <p>Register for COLAW Fantasy or log in to your account.</p>
+
+  <form id="register-form">
+    <h3>Create an account</h3>
+    <label for="full-name">Full name</label>
+    <input id="full-name" name="full_name" required maxlength="100"
+      autocomplete="name" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <label for="username">Fantasy team name / username</label>
+    <input id="username" name="username" required minlength="3" maxlength="30"
+      autocomplete="username" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <label for="register-email">Email address</label>
+    <input id="register-email" name="email" type="email" required
+      autocomplete="email" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <label for="register-password">Password (at least 8 characters)</label>
+    <input id="register-password" name="password" type="password" required minlength="8"
+      autocomplete="new-password" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <button type="submit" style="background:#101d35;color:white;padding:12px 18px;border:0;border-radius:8px;width:100%;">
+      Register
+    </button>
+  </form>
+
+  <hr style="margin:24px 0;">
+
+  <form id="login-form">
+    <h3>Already registered?</h3>
+    <label for="login-email">Email address</label>
+    <input id="login-email" name="email" type="email" required autocomplete="email"
+      style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <label for="login-password">Password</label>
+    <input id="login-password" name="password" type="password" required autocomplete="current-password"
+      style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <button type="submit" style="background:#d9bd70;color:#101d35;padding:12px 18px;border:0;border-radius:8px;width:100%;">
+      Log in
+    </button>
+  </form>
+
+  <p id="auth-message" role="status" aria-live="polite"></p>
+</section>
+  
+  <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
   const SUPABASE_URL = "https://adbjveurnwktbryftjonj.supabase.co";
@@ -143,6 +192,95 @@
   window.colawSupabase = supabase;
   console.log("COLAW Fantasy connection initialized.");
 </script>
+  
+<script>
+const accessMessage = document.getElementById("auth-message");
+
+document.getElementById("register-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+
+  button.disabled = true;
+  accessMessage.textContent = "Creating your account...";
+
+  try {
+    const fullName = document.getElementById("full-name").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const password = document.getElementById("register-password").value;
+
+    if (username.length < 3) {
+      throw new Error("Your username must contain at least 3 characters.");
+    }
+
+    const { data, error } = await window.colawSupabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName, username },
+        emailRedirectTo: window.location.origin
+      }
+    });
+
+    if (error) throw error;
+
+    accessMessage.textContent = data.session
+      ? "Account created! Your profile is awaiting administrator approval."
+      : "Account created! Check your email to confirm your address. Your profile will remain pending until an administrator approves it.";
+
+    form.reset();
+  } catch (error) {
+    accessMessage.textContent = error.message || "Registration failed. Please try again.";
+  } finally {
+    button.disabled = false;
+  }
+});
+
+document.getElementById("login-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+
+  button.disabled = true;
+  accessMessage.textContent = "Signing in...";
+
+  try {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    const { data, error } =
+      await window.colawSupabase.auth.signInWithPassword({ email, password });
+
+    if (error) throw error;
+
+    const { data: profile, error: profileError } =
+      await window.colawSupabase
+        .from("profiles")
+        .select("is_approved")
+        .eq("id", data.user.id)
+        .single();
+
+    if (profileError) throw profileError;
+
+    if (!profile.is_approved) {
+      await window.colawSupabase.auth.signOut();
+      accessMessage.textContent =
+        "Your account is awaiting administrator approval. Please try again later.";
+      return;
+    }
+
+    accessMessage.textContent =
+      "Welcome back! You're signed in. The fantasy dashboard is our next step.";
+  } catch (error) {
+    accessMessage.textContent =
+      error.message || "Login failed. Please check your details and try again.";
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+  
   
 </body>
 </html>
