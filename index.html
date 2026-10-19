@@ -280,6 +280,109 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
   }
 });
 </script>
+
+  <section id="admin-dashboard" style="display:none;max-width:900px;margin:30px auto;padding:20px;">
+  <h2>COLAW Fantasy — Admin Dashboard</h2>
+  <p>Manage student registrations and account approvals.</p>
+  <button id="admin-refresh" type="button">Refresh accounts</button>
+  <p id="admin-message" role="status"></p>
+  <div id="pending-students"></div>
+</section>
+
+<script type="module">
+const db = window.colawSupabase;
+const dashboard = document.getElementById("admin-dashboard");
+const message = document.getElementById("admin-message");
+const list = document.getElementById("pending-students");
+
+async function loadAdminDashboard() {
+  message.textContent = "Checking administrator access...";
+  list.replaceChildren();
+
+  const { data: { user }, error: authError } = await db.auth.getUser();
+
+  if (authError || !user) {
+    message.textContent = "Please sign in with your administrator account first.";
+    return;
+  }
+
+  const { data: profile, error } = await db
+    .from("profiles")
+    .select("is_admin, is_approved")
+    .eq("id", user.id)
+    .single();
+
+  if (error || !profile || profile.is_admin !== true || profile.is_approved !== true) {
+    message.textContent = "Administrator access required.";
+    return;
+  }
+
+  dashboard.style.display = "block";
+  message.textContent = "Administrator access confirmed. Loading pending accounts...";
+
+  const { data: students, error: studentsError } = await db
+    .from("profiles")
+    .select("id, full_name, username, created_at")
+    .eq("is_approved", false)
+    .order("created_at", { ascending: true });
+
+  if (studentsError) {
+    message.textContent = "Could not load accounts. Check database access policies.";
+    return;
+  }
+
+  list.replaceChildren();
+
+  if (!students || students.length === 0) {
+    message.textContent = "No pending student accounts.";
+    return;
+  }
+
+  message.textContent = `${students.length} account(s) awaiting approval.`;
+
+  for (const student of students) {
+    const card = document.createElement("div");
+    card.style.cssText = "padding:15px;margin:12px 0;border:1px solid #ccc;border-radius:10px";
+
+    const name = document.createElement("h3");
+    name.textContent = student.full_name || student.username || "Unnamed student";
+
+    const username = document.createElement("p");
+    username.textContent = `Team / username: ${student.username || "Not set"}`;
+
+    const approve = document.createElement("button");
+    approve.type = "button";
+    approve.textContent = "Approve student";
+
+    approve.addEventListener("click", async () => {
+      approve.disabled = true;
+      const { error: updateError } = await db
+        .from("profiles")
+        .update({ is_approved: true })
+        .eq("id", student.id);
+
+      if (updateError) {
+        message.textContent = "Approval failed. Check the database security policies.";
+        approve.disabled = false;
+        return;
+      }
+
+      message.textContent = "Student approved.";
+      await loadAdminDashboard();
+    });
+
+    card.append(name, username, approve);
+    list.append(card);
+  }
+}
+
+document.getElementById("admin-refresh")
+  .addEventListener("click", loadAdminDashboard);
+
+db.auth.onAuthStateChange((_event, session) => {
+  if (session) loadAdminDashboard();
+});
+</script>
   
   
 </body>
