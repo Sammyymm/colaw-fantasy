@@ -271,7 +271,7 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
     }
 
     accessMessage.textContent =
-      "Welcome back! You're signed in. The fantasy dashboard is our next step.";
+      "Welcome back! You're signed in.";
   } catch (error) {
     accessMessage.textContent =
       error.message || "Login failed. Please check your details and try again.";
@@ -385,6 +385,563 @@ db.auth.onAuthStateChange((_event, session) => {
 });
 </script>
   
+  
+
+<!-- COLAW FANTASY DASHBOARD -->
+<section id="fantasy-dashboard" style="display:none;">
+  <style>
+    #fantasy-dashboard {
+      --navy: #101d35;
+      --gold: #d9b760;
+      --paper: #f4f6fa;
+      --ink: #17243a;
+      color: var(--ink);
+      background: var(--paper);
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+    #fantasy-dashboard * { box-sizing: border-box; }
+    #fantasy-dashboard .fantasy-top {
+      background: linear-gradient(120deg,#101d35,#20395f);
+      color: white;
+      padding: 25px 20px;
+      border-bottom: 4px solid var(--gold);
+    }
+    #fantasy-dashboard .fantasy-wrap {
+      max-width: 1100px;
+      margin: auto;
+    }
+    #fantasy-dashboard .fantasy-brand {
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+    #fantasy-dashboard .fantasy-brand span { color: var(--gold); }
+    #fantasy-dashboard .fantasy-subtitle {
+      color: #d8dfeb;
+      margin-top: 7px;
+      font-size: 13px;
+    }
+    #fantasy-dashboard .fantasy-nav {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+    #fantasy-dashboard .fantasy-nav button {
+      border: 1px solid #52627c;
+      background: #ffffff12;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+    #fantasy-dashboard .fantasy-nav button.active {
+      background: var(--gold);
+      color: var(--navy);
+      border-color: var(--gold);
+      font-weight: bold;
+    }
+    #fantasy-dashboard .fantasy-content {
+      max-width: 1100px;
+      margin: auto;
+      padding: 24px 16px 50px;
+    }
+    #fantasy-dashboard .fantasy-heading {
+      font-size: 23px;
+      color: var(--navy);
+      margin: 0 0 8px;
+    }
+    #fantasy-dashboard .fantasy-muted {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    #fantasy-dashboard .fantasy-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(135px,1fr));
+      gap: 12px;
+      margin: 22px 0;
+    }
+    #fantasy-dashboard .fantasy-stat {
+      background: white;
+      padding: 17px;
+      border: 1px solid #e0e5ed;
+      border-radius: 13px;
+      box-shadow: 0 4px 15px #101d3508;
+    }
+    #fantasy-dashboard .fantasy-stat small {
+      display: block;
+      color: #64748b;
+      margin-bottom: 9px;
+    }
+    #fantasy-dashboard .fantasy-stat strong {
+      font-size: 25px;
+      color: var(--navy);
+    }
+    #fantasy-dashboard .fantasy-panel {
+      background: white;
+      padding: 19px;
+      border: 1px solid #e0e5ed;
+      border-radius: 14px;
+      margin: 16px 0;
+      box-shadow: 0 4px 15px #101d3508;
+    }
+    #fantasy-dashboard .fantasy-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+      gap: 10px;
+      margin: 17px 0;
+    }
+    #fantasy-dashboard input,
+    #fantasy-dashboard select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d7deea;
+      border-radius: 9px;
+      background: white;
+      color: var(--ink);
+      font-size: 14px;
+    }
+    #fantasy-dashboard .fantasy-btn {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 15px;
+      background: var(--navy);
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #fantasy-dashboard .fantasy-btn.gold {
+      background: var(--gold);
+      color: var(--navy);
+    }
+    #fantasy-dashboard .fantasy-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+    #fantasy-dashboard .fantasy-table-wrap { overflow-x: auto; }
+    #fantasy-dashboard table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+    }
+    #fantasy-dashboard th {
+      text-align: left;
+      background: #f0f3f8;
+      color: var(--navy);
+      padding: 12px 10px;
+      white-space: nowrap;
+    }
+    #fantasy-dashboard td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #edf0f5;
+    }
+    #fantasy-dashboard .fantasy-rating {
+      display: inline-block;
+      background: var(--navy);
+      color: var(--gold);
+      font-weight: bold;
+      padding: 5px 7px;
+      border-radius: 6px;
+    }
+    #fantasy-dashboard .fantasy-pill {
+      display: inline-block;
+      background: #eef2f7;
+      color: #334155;
+      border-radius: 20px;
+      padding: 5px 9px;
+      font-size: 12px;
+    }
+    #fantasy-dashboard .fantasy-message {
+      margin-top: 14px;
+      padding: 12px;
+      background: #f5f7fb;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    #fantasy-dashboard .fantasy-message:empty { display:none; }
+    #fantasy-dashboard .fantasy-view { display:none; }
+    #fantasy-dashboard .fantasy-view.active { display:block; }
+    #fantasy-dashboard .fantasy-footer {
+      color: #64748b;
+      font-size: 12px;
+      text-align: center;
+      padding: 25px 10px;
+    }
+    @media(max-width:550px) {
+      #fantasy-dashboard .fantasy-top { padding: 20px 15px; }
+      #fantasy-dashboard .fantasy-brand { font-size: 22px; }
+      #fantasy-dashboard .fantasy-content { padding: 18px 11px 35px; }
+      #fantasy-dashboard .fantasy-panel { padding: 13px; }
+    }
+  </style>
+
+  <header class="fantasy-top">
+    <div class="fantasy-wrap">
+      <div class="fantasy-brand">COLAW <span>FANTASY</span></div>
+      <div class="fantasy-subtitle">JURIS LEAGUE · BUILD YOUR XI · RULE YOUR LEAGUE</div>
+      <nav class="fantasy-nav" aria-label="Fantasy dashboard">
+        <button type="button" class="active" data-fantasy-tab="overview">Overview</button>
+        <button type="button" data-fantasy-tab="market">Player Market</button>
+        <button type="button" data-fantasy-tab="squad">My Squad</button>
+        <button type="button" data-fantasy-tab="leaderboard">Leaderboard</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="fantasy-content">
+    <section class="fantasy-view active" data-fantasy-view="overview">
+      <h1 class="fantasy-heading">Your Fantasy Dugout</h1>
+      <p class="fantasy-muted">Welcome to COLAW Fantasy. Discover the players, build your starting XI, and compete with fellow law students.</p>
+
+      <div class="fantasy-stats">
+        <div class="fantasy-stat"><small>Players available</small><strong id="cf-total-players">—</strong></div>
+        <div class="fantasy-stat"><small>Players in your squad</small><strong id="cf-squad-count">0 / 11</strong></div>
+        <div class="fantasy-stat"><small>Squad value</small><strong id="cf-squad-value">0.0</strong></div>
+        <div class="fantasy-stat"><small>Fantasy points</small><strong id="cf-my-points">0</strong></div>
+      </div>
+
+      <div class="fantasy-panel">
+        <h2 class="fantasy-heading">Your season starts here</h2>
+        <p class="fantasy-muted">Explore the player market, check each player's club, position, academic level and overall rating, then add players to your squad.</p>
+        <button type="button" class="fantasy-btn gold" data-fantasy-tab="market">Explore players →</button>
+      </div>
+      <div id="cf-overview-message" class="fantasy-message" role="status"></div>
+    </section>
+
+    <section class="fantasy-view" data-fantasy-view="market">
+      <h1 class="fantasy-heading">Player Market</h1>
+      <p class="fantasy-muted">Find your next signing. Player information is loaded from the COLAW Fantasy database.</p>
+      <div class="fantasy-controls">
+        <input id="cf-search" type="search" placeholder="Search player name…" aria-label="Search players">
+        <select id="cf-club-filter" aria-label="Filter by club">
+          <option value="">All clubs</option>
+          <option>Sky FC</option>
+          <option>Red Ikas United</option>
+          <option>Nepo Boys United</option>
+          <option>Balaclavas</option>
+          <option>Unassigned</option>
+        </select>
+        <select id="cf-position-filter" aria-label="Filter by position">
+          <option value="">All positions</option>
+          <option value="GK">Goalkeeper</option>
+          <option value="DEF">Defender</option>
+          <option value="MID">Midfielder</option>
+          <option value="FWD">Forward</option>
+        </select>
+      </div>
+      <div class="fantasy-panel">
+        <div class="fantasy-table-wrap">
+          <table>
+            <thead><tr><th>Player</th><th>Club</th><th>Position</th><th>Level</th><th>OVR</th><th>Price</th><th></th></tr></thead>
+            <tbody id="cf-player-rows"><tr><td colspan="7">Loading players…</td></tr></tbody>
+          </table>
+        </div>
+        <div id="cf-market-message" class="fantasy-message" role="status"></div>
+      </div>
+    </section>
+
+    <section class="fantasy-view" data-fantasy-view="squad">
+      <h1 class="fantasy-heading">My Squad</h1>
+      <p class="fantasy-muted">Build an 11-player team. Select a captain to receive a double-points multiplier when scoring is added.</p>
+      <div class="fantasy-panel">
+        <div class="fantasy-stats">
+          <div class="fantasy-stat"><small>Squad size</small><strong id="cf-squad-count-2">0 / 11</strong></div>
+          <div class="fantasy-stat"><small>Squad value</small><strong id="cf-squad-value-2">0.0</strong></div>
+        </div>
+        <div class="fantasy-table-wrap">
+          <table>
+            <thead><tr><th>Player</th><th>Position</th><th>Price</th><th>Captain</th><th></th></tr></thead>
+            <tbody id="cf-squad-rows"><tr><td colspan="5">Your squad is empty. Visit the Player Market to sign players.</td></tr></tbody>
+          </table>
+        </div>
+        <div id="cf-squad-message" class="fantasy-message" role="status"></div>
+      </div>
+    </section>
+
+    <section class="fantasy-view" data-fantasy-view="leaderboard">
+      <h1 class="fantasy-heading">League Leaderboard</h1>
+      <p class="fantasy-muted">Compare fantasy points with other approved students.</p>
+      <div class="fantasy-panel">
+        <div class="fantasy-table-wrap">
+          <table>
+            <thead><tr><th>Rank</th><th>Manager</th><th>Fantasy points</th></tr></thead>
+            <tbody id="cf-leaderboard-rows"><tr><td colspan="3">Leaderboard will appear here.</td></tr></tbody>
+          </table>
+        </div>
+        <div id="cf-leaderboard-message" class="fantasy-message" role="status"></div>
+      </div>
+    </section>
+
+    <div class="fantasy-footer">COLAW FANTASY · COLLEGE OF LAW · JURIS LEAGUE</div>
+  </main>
+</section>
+
+<script>
+(function () {
+  const root = document.getElementById("fantasy-dashboard");
+  if (!root || root.dataset.initialized === "yes") return;
+  root.dataset.initialized = "yes";
+
+  const $ = (id) => document.getElementById(id);
+  const setMessage = (id, text) => { $(id).textContent = text || ""; };
+  let players = [];
+  let squad = [];
+  let captainId = null;
+  let userId = null;
+
+  function showTab(tab) {
+    root.querySelectorAll("[data-fantasy-view]").forEach((view) => {
+      view.classList.toggle("active", view.dataset.fantasyView === tab);
+    });
+    root.querySelectorAll("[data-fantasy-tab]").forEach((button) => {
+      button.classList.toggle("active", button.dataset.fantasyTab === tab);
+    });
+    if (tab === "market") renderPlayers();
+    if (tab === "squad") renderSquad();
+  }
+
+  root.querySelectorAll("[data-fantasy-tab]").forEach((button) => {
+    button.addEventListener("click", () => showTab(button.dataset.fantasyTab));
+  });
+
+  function safeText(value) {
+    return String(value ?? "");
+  }
+
+  function playerId(player) {
+    return safeText(player.id);
+  }
+
+  function renderPlayers() {
+    const search = $("cf-search").value.trim().toLowerCase();
+    const club = $("cf-club-filter").value;
+    const position = $("cf-position-filter").value;
+    const filtered = players.filter((p) => {
+      const name = safeText(p.full_name).toLowerCase();
+      const playerClub = safeText(p.club_name || "Unassigned");
+      return name.includes(search)
+        && (!club || playerClub === club)
+        && (!position || p.position === position);
+    });
+
+    const body = $("cf-player-rows");
+    body.replaceChildren();
+
+    if (!filtered.length) {
+      const row = body.insertRow();
+      const cell = row.insertCell();
+      cell.colSpan = 7;
+      cell.textContent = players.length
+        ? "No players match those filters."
+        : "No players are currently available.";
+      return;
+    }
+
+    filtered.forEach((p) => {
+      const row = body.insertRow();
+      const values = [
+        safeText(p.full_name),
+        safeText(p.club_name || "Unassigned"),
+        safeText(p.position),
+        p.level == null ? "—" : p.level + " level",
+        p.rating == null ? "—" : p.rating,
+        p.price == null ? "—" : Number(p.price).toFixed(1)
+      ];
+      values.forEach((value, index) => {
+        const cell = row.insertCell();
+        if (index === 4 && p.rating != null) {
+          const badge = document.createElement("span");
+          badge.className = "fantasy-rating";
+          badge.textContent = value;
+          cell.appendChild(badge);
+        } else {
+          cell.textContent = value;
+        }
+      });
+      const action = row.insertCell();
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "fantasy-btn gold";
+      button.textContent = squad.some((s) => playerId(s) === playerId(p)) ? "Added" : "Add";
+      button.disabled = squad.some((s) => playerId(s) === playerId(p)) || squad.length >= 11;
+      button.addEventListener("click", () => addPlayer(p));
+      action.appendChild(button);
+    });
+  }
+
+  function renderSquad() {
+    const body = $("cf-squad-rows");
+    body.replaceChildren();
+    if (!squad.length) {
+      const row = body.insertRow();
+      const cell = row.insertCell();
+      cell.colSpan = 5;
+      cell.textContent = "Your squad is empty. Visit the Player Market to sign players.";
+    } else {
+      squad.forEach((p) => {
+        const row = body.insertRow();
+        row.insertCell().textContent = safeText(p.full_name);
+        row.insertCell().textContent = safeText(p.position);
+        row.insertCell().textContent = p.price == null ? "—" : Number(p.price).toFixed(1);
+
+        const captainCell = row.insertCell();
+        const captainButton = document.createElement("button");
+        captainButton.type = "button";
+        captainButton.className = "fantasy-btn";
+        captainButton.textContent = captainId === playerId(p) ? "★ Captain" : "Make captain";
+        captainButton.addEventListener("click", () => {
+          captainId = playerId(p);
+          renderSquad();
+        });
+        captainCell.appendChild(captainButton);
+
+        const removeCell = row.insertCell();
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "fantasy-btn";
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", () => {
+          squad = squad.filter((item) => playerId(item) !== playerId(p));
+          if (captainId === playerId(p)) captainId = null;
+          renderSquad();
+          renderPlayers();
+          updateStats();
+        });
+        removeCell.appendChild(removeButton);
+      });
+    }
+    const count = squad.length + " / 11";
+    $("cf-squad-count").textContent = count;
+    $("cf-squad-count-2").textContent = count;
+    const value = squad.reduce((sum, p) => sum + Number(p.price || 0), 0).toFixed(1);
+    $("cf-squad-value").textContent = value;
+    $("cf-squad-value-2").textContent = value;
+  }
+
+  function updateStats() {
+    $("cf-total-players").textContent = players.length;
+    renderSquad();
+  }
+
+  function addPlayer(player) {
+    if (squad.length >= 11) {
+      setMessage("cf-squad-message", "Your squad already has 11 players. Remove one before adding another.");
+      showTab("squad");
+      return;
+    }
+    if (squad.some((p) => playerId(p) === playerId(player))) return;
+    squad.push(player);
+    setMessage("cf-squad-message", "");
+    renderPlayers();
+    renderSquad();
+    updateStats();
+  }
+
+  ["cf-search", "cf-club-filter", "cf-position-filter"].forEach((id) => {
+    $(id).addEventListener(id === "cf-search" ? "input" : "change", renderPlayers);
+  });
+
+  async function initialize() {
+    const db = window.colawSupabase;
+    if (!db || !db.auth) {
+      setMessage("cf-overview-message", "The dashboard could not connect to the existing Supabase client. Your login code has not been changed.");
+      return;
+    }
+
+    try {
+      const { data: sessionData, error: sessionError } = await db.auth.getSession();
+      if (sessionError) throw sessionError;
+      const session = sessionData.session;
+      if (!session) {
+        setMessage("cf-overview-message", "Please log in to access your fantasy dashboard.");
+        return;
+      }
+
+      userId = session.user.id;
+      const { data: profile, error: profileError } = await db
+        .from("profiles")
+        .select("is_approved")
+        .eq("id", userId)
+        .single();
+
+      if (profileError) throw profileError;
+      if (!profile || profile.is_approved !== true) {
+        setMessage("cf-overview-message", "Your account must be approved before using COLAW Fantasy.");
+        return;
+      }
+
+      root.style.display = "block";
+      setMessage("cf-overview-message", "You're signed in and approved. Welcome to COLAW Fantasy!");
+
+      const { data: playerData, error: playerError } = await db
+        .from("players")
+        .select("id,full_name,club_name,position,level,rating,price,total_points,is_available")
+        .eq("is_available", true)
+        .order("full_name");
+
+      if (playerError) throw playerError;
+      players = playerData || [];
+      renderPlayers();
+      updateStats();
+      loadLeaderboard(db);
+    } catch (error) {
+      setMessage("cf-overview-message", "Dashboard loading error: " + (error.message || "Please try again."));
+    }
+  }
+
+  async function loadLeaderboard(db) {
+    try {
+      const { data, error } = await db
+        .from("squads")
+        .select("user_id,total_points");
+      if (error) throw error;
+
+      const { data: profiles, error: profileError } = await db
+        .from("profiles")
+        .select("id,full_name,username")
+        .eq("is_approved", true);
+      if (profileError) throw profileError;
+
+      const names = new Map((profiles || []).map((p) => [
+        p.id, p.full_name || p.username || "Manager"
+      ]));
+      const totals = new Map();
+      (data || []).forEach((s) => {
+        totals.set(s.user_id, (totals.get(s.user_id) || 0) + Number(s.total_points || 0));
+      });
+      const rows = Array.from(totals.entries())
+        .map(([id, points]) => ({ name: names.get(id) || "Manager", points }))
+        .sort((a, b) => b.points - a.points);
+
+      const body = $("cf-leaderboard-rows");
+      body.replaceChildren();
+      if (!rows.length) {
+        const row = body.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 3;
+        cell.textContent = "The leaderboard will populate as managers earn points.";
+        return;
+      }
+      rows.forEach((item, index) => {
+        const row = body.insertRow();
+        row.insertCell().textContent = index + 1;
+        row.insertCell().textContent = item.name;
+        row.insertCell().textContent = item.points;
+      });
+    } catch (error) {
+      setMessage("cf-leaderboard-message", "Leaderboard isn't available yet: " + (error.message || "Please try again later."));
+    }
+  }
+
+  window.colawFantasyInitialize = initialize;
+  initialize();
+})();
+</script>
+<!-- END COLAW FANTASY DASHBOARD -->
   
 </body>
 </html>
