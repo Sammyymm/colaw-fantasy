@@ -878,7 +878,10 @@ db.auth.onAuthStateChange((_event, session) => {
         return;
       }
 
-      root.style.display = "block";
+      document.querySelector("body > header").style.display = "none";
+document.querySelector("body > main").style.display = "none";
+document.getElementById("student-access").style.display = "none";
+root.style.display = "block";
       setMessage("cf-overview-message", "You're signed in and approved. Welcome to COLAW Fantasy!");
 
       const { data: playerData, error: playerError } = await db
