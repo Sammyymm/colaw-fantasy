@@ -1,319 +1,573 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101d35">
-<title>COLAW Fantasy | Juris League</title>
-<style>
-:root{--navy:#101d35;--navy2:#1d3558;--gold:#d9b760;--paper:#f3f5f9;--ink:#17243a;--muted:#68758b;--line:#e1e6ef;--white:#fff;--green:#176449;--red:#a52c39}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);font-family:Arial,sans-serif;color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
-.site-head{background:linear-gradient(120deg,var(--navy),var(--navy2));color:#fff;padding:24px 18px;border-bottom:4px solid var(--gold)}.wrap{max-width:1150px;margin:auto}.brand{font-size:26px;font-weight:900;letter-spacing:1px}.brand span{color:var(--gold)}.subtitle{color:#d8dfeb;margin-top:7px;font-size:13px}.nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.nav button,.btn{border:1px solid #52627c;background:#ffffff12;color:white;padding:11px 14px;border-radius:9px}.nav button.active{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:bold}.nav button.admin-tab{border-color:var(--gold)}main{max-width:1150px;margin:24px auto;padding:0 16px}.view{display:none}.view.active{display:block}.heading{font-size:25px;margin:0 0 8px;color:var(--navy)}.muted{color:var(--muted);line-height:1.55;font-size:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0}.stat,.panel,.auth-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 4px 15px #101d3508}.stat small{display:block;color:var(--muted);margin-bottom:8px}.stat strong{font-size:27px;color:var(--navy)}.panel{margin:16px 0}.btn{background:var(--navy);border:0;color:white;font-weight:bold}.btn.gold{background:var(--gold);color:var(--navy)}.btn.light{background:#edf1f7;color:var(--navy)}.btn.danger{background:var(--red);color:white}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin:16px 0}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.field label{font-size:13px;font-weight:bold;color:#34425a}.field input,.field select,input.search,select.filter{width:100%;padding:12px;border:1px solid #d5ddea;border-radius:9px;background:white;color:var(--ink)}.message{margin-top:12px;padding:12px;background:#f2f5fa;border-radius:8px;font-size:14px;line-height:1.5;white-space:pre-wrap}.message:empty{display:none}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th{text-align:left;background:#f0f3f8;color:var(--navy);padding:12px 10px;white-space:nowrap}td{padding:12px 10px;border-bottom:1px solid #edf0f5;vertical-align:middle}.rating{display:inline-block;background:var(--navy);color:var(--gold);font-weight:bold;padding:5px 8px;border-radius:6px}.pill{display:inline-block;background:#edf1f7;color:#34425a;padding:5px 9px;border-radius:20px;font-size:12px}.auth-layout{max-width:640px;margin:25px auto}.auth-card h2{margin-top:0}.auth-card form{margin:18px 0}.auth-card button[type=submit]{width:100%;padding:12px}.hidden{display:none!important}.admin-layout{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.notice{border-left:4px solid var(--gold);padding:12px 14px;background:#fff9e9;border-radius:6px;color:#514321;font-size:14px;line-height:1.5}.footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 10px}.inline-actions{display:flex;gap:7px;flex-wrap:wrap}.player-form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.small{font-size:12px;color:var(--muted)}@media(max-width:560px){.site-head{padding:20px 14px}.brand{font-size:22px}main{padding:0 11px}.panel,.stat,.auth-card{padding:13px}.heading{font-size:22px}}
-</style>
-</head>
-<body>
-<header class="site-head" id="site-header">
-  <div class="wrap">
-    <div class="brand">COLAW <span>FANTASY</span></div>
-    <div class="subtitle">JURIS LEAGUE · BUILD YOUR XI · RULE YOUR LEAGUE</div>
-    <nav class="nav" id="main-nav" aria-label="Main navigation">
-      <button class="active" data-view="overview">Overview</button>
-      <button data-view="market">Player Market</button>
-      <button data-view="squad">My Squad</button>
-      <button data-view="leaderboard">Leaderboard</button>
-      <button id="admin-nav" class="admin-tab hidden" data-view="admin">Admin ⚙</button>
-      <button id="logout-button" class="hidden">Log out</button>
-    </nav>
-  </div>
-</header>
-<main>
-  <section id="auth-view" class="auth-layout">
-    <div class="auth-card">
-      <h2>Student Access</h2>
-      <p class="muted">Register for COLAW Fantasy or sign in to your approved account. New accounts require administrator approval.</p>
-      <form id="register-form">
-        <h3>Create an account</h3>
-        <div class="field"><label for="reg-name">Full name</label><input id="reg-name" required maxlength="100" autocomplete="name"></div>
-        <div class="field"><label for="reg-username">Fantasy team name / username</label><input id="reg-username" required minlength="3" maxlength="30" autocomplete="username"></div>
-        <div class="field"><label for="reg-email">Email address</label><input id="reg-email" type="email" required autocomplete="email"></div>
-        <div class="field"><label for="reg-password">Password (at least 8 characters)</label><input id="reg-password" type="password" required minlength="8" autocomplete="new-password"></div>
-        <button class="btn" type="submit">Create account</button>
-      </form>
-      <hr>
-      <form id="login-form">
-        <h3>Already registered?</h3>
-        <div class="field"><label for="login-email">Email address</label><input id="login-email" type="email" required autocomplete="email"></div>
-        <div class="field"><label for="login-password">Password</label><input id="login-password" type="password" required autocomplete="current-password"></div>
-        <button class="btn gold" type="submit">Log in</button>
-      </form>
-      <div id="auth-message" class="message" role="status" aria-live="polite"></div>
-    </div>
-  </section>
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <meta name="theme-color" content="#101d35">  
+  <title>COLAW Fantasy | Juris League</title>  
+  <style>  
+    * { box-sizing: border-box; }  
+    body {  
+      margin: 0;  
+      font-family: Arial, sans-serif;  
+      background: #f2f5f9;  
+      color: #15233d;  
+    }  
+    header {  
+      background: #101d35;  
+      color: white;  
+      padding: 22px 18px;  
+      border-bottom: 4px solid #d7b568;  
+    }  
+    .brand {  
+      font-size: 23px;  
+      font-weight: 800;  
+      letter-spacing: 1px;  
+    }  
+    .brand span { color: #e4c77e; }  
+    header p { color: #c5ccda; margin-bottom: 0; }  
+    main {  
+      max-width: 760px;  
+      margin: 24px auto;  
+      padding: 0 16px;  
+    }  
+    .hero {  
+      background: linear-gradient(135deg, #152b4a, #176449);  
+      color: white;  
+      border-radius: 16px;  
+      padding: 28px 22px;  
+    }  
+    .hero small {  
+      color: #e4c77e;  
+      font-weight: bold;  
+      letter-spacing: 2px;  
+    }  
+    h1 { font-size: 30px; margin: 12px 0; }  
+    .hero p { line-height: 1.6; color: #e1e9e8; }  
+    .button {  
+      display: inline-block;  
+      background: #e4c77e;  
+      color: #15233d;  
+      padding: 13px 18px;  
+      border-radius: 8px;  
+      font-weight: bold;  
+      text-decoration: none;  
+      margin-top: 8px;  
+    }  
+    .section-title { margin: 28px 0 14px; }  
+    .cards {  
+      display: grid;  
+      grid-template-columns: repeat(2, minmax(0, 1fr));  
+      gap: 12px;  
+    }  
+    .card {  
+      background: white;  
+      border: 1px solid #e0e5ed;  
+      border-radius: 12px;  
+      padding: 18px;  
+    }  
+    .card .emoji { font-size: 25px; }  
+    .card h3 { margin: 12px 0 6px; }  
+    .card p { font-size: 14px; line-height: 1.5; color: #657187; }  
+    footer {  
+      text-align: center;  
+      color: #778196;  
+      padding: 28px 16px;  
+      font-size: 13px;  
+    }  
+    @media (max-width: 440px) {  
+      .cards { grid-template-columns: 1fr; }  
+      h1 { font-size: 26px; }  
+    }  
+  </style>  
+</head>  
+<body>  
+  <header>  
+    <div class="brand">COLAW <span>FANTASY</span></div>  
+    <p>JURIS LEAGUE · SEASON 2026</p>  
+  </header>    <main>  
+    <section class="hero">  
+      <small>YOUR COLLEGE. YOUR LEAGUE.</small>  
+      <h1>Welcome to COLAW Fantasy.</h1>  
+      <p>  
+        Build your dream squad, choose your captain,  
+        earn fantasy points and compete with your  
+        fellow law students for the top spot.  
+      </p>  
+      <a class="button" href="#features">Explore the League ↓</a>  
+    </section>  <h2 class="section-title" id="features">The Fantasy Experience</h2>  
+<section class="cards">  
+  <article class="card">  
+    <div class="emoji">⚽</div>  
+    <h3>Pick Your Squad</h3>  
+    <p>Choose players from the clubs competing in the COLAW JURIS LEAGUE.</p>  
+  </article>  
+  <article class="card">  
+    <div class="emoji">👑</div>  
+    <h3>Choose Your Captain</h3>  
+    <p>Back your star player and make every gameweek count.</p>  
+  </article>  
+  <article class="card">  
+    <div class="emoji">🏆</div>  
+    <h3>Global Leaderboard</h3>  
+    <p>Compete against classmates and climb the fantasy rankings.</p>  
+  </article>  
+  <article class="card">  
+    <div class="emoji">📊</div>  
+    <h3>Track Your Points</h3>  
+    <p>Follow your weekly scores and season performance.</p>  
+  </article>  
+</section>
 
-  <section id="app-view" class="hidden">
-    <section class="view active" data-panel="overview">
-      <h1 class="heading">Your Fantasy Dugout</h1>
-      <p class="muted">Build an 11-player squad, choose a captain and compete with fellow law students.</p>
-      <div class="grid">
-        <div class="stat"><small>Players available</small><strong id="stat-players">—</strong></div>
-        <div class="stat"><small>Players in your squad</small><strong id="stat-squad">0 / 11</strong></div>
-        <div class="stat"><small>Squad value</small><strong id="stat-value">0.0</strong></div>
-        <div class="stat"><small>Fantasy points</small><strong id="stat-points">0</strong></div>
-      </div>
-      <div class="panel"><h2 class="heading">Your season starts here</h2><p class="muted">Explore the player market and check each player's club, position, academic level, rating and price.</p><button class="btn gold" data-go="market">Explore players →</button></div>
-      <div id="overview-message" class="message" role="status"></div>
-    </section>
+  </main>    <footer>  
+    COLAW FANTASY · An unofficial fantasy game for COLAW JURIS LEAGUE.  
+  </footer>  <!-- COLAW Fantasy student access -->  <section id="student-access" style="max-width:600px;margin:30px auto;padding:24px;background:white;border-radius:16px;box-shadow:0 4px 18px #0001;">  
+  <h2 style="color:#101d35;">Student Access</h2>  
+  <p>Register for COLAW Fantasy or log in to your account.</p>    <form id="register-form">  
+    <h3>Create an account</h3>  
+    <label for="full-name">Full name</label>  
+    <input id="full-name" name="full_name" required maxlength="100"  
+      autocomplete="name" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">  <label for="username">Fantasy team name / username</label>  
+<input id="username" name="username" required minlength="3" maxlength="30"  
+  autocomplete="username" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">  
 
-    <section class="view" data-panel="market">
-      <h1 class="heading">Player Market</h1><p class="muted">Choose from players registered for the COLAW JURIS LEAGUE.</p>
-      <div class="controls">
-        <input class="search" id="player-search" type="search" placeholder="Search player name…">
-        <select class="filter" id="club-filter"><option value="">All clubs</option><option>Sky FC</option><option>Red Ikas United</option><option>Nepo Boys United</option><option>Balaclavas</option><option>Unassigned</option></select>
-        <select class="filter" id="position-filter"><option value="">All positions</option><option value="GK">Goalkeeper</option><option value="DEF">Defender</option><option value="MID">Midfielder</option><option value="FWD">Forward</option></select>
-      </div>
-      <div class="panel"><div class="table-wrap"><table><thead><tr><th>Player</th><th>Club</th><th>Position</th><th>Level</th><th>OVR</th><th>Price</th><th></th></tr></thead><tbody id="market-rows"></tbody></table></div><div id="market-message" class="message"></div></div>
-    </section>
+<label for="register-email">Email address</label>  
+<input id="register-email" name="email" type="email" required  
+  autocomplete="email" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">  
 
-    <section class="view" data-panel="squad">
-      <h1 class="heading">My Squad</h1><p class="muted">Select up to 11 players. Choose one captain; their points will be doubled when points are calculated by the league rules.</p>
-      <div class="grid"><div class="stat"><small>Squad size</small><strong id="squad-count">0 / 11</strong></div><div class="stat"><small>Squad value</small><strong id="squad-value">0.0</strong></div></div>
-      <div class="panel"><div class="table-wrap"><table><thead><tr><th>Player</th><th>Club</th><th>Position</th><th>Price</th><th>Captain</th><th></th></tr></thead><tbody id="squad-rows"></tbody></table></div><div id="squad-message" class="message"></div><p class="small">Squad changes are saved to your account when the required database permissions and tables are available.</p></div>
-    </section>
+<label for="register-password">Password (at least 8 characters)</label>  
+<input id="register-password" name="password" type="password" required minlength="8"  
+  autocomplete="new-password" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">  
 
-    <section class="view" data-panel="leaderboard">
-      <h1 class="heading">League Leaderboard</h1><p class="muted">Compare fantasy points with other approved students.</p>
-      <div class="panel"><div class="table-wrap"><table><thead><tr><th>Rank</th><th>Manager</th><th>Fantasy points</th></tr></thead><tbody id="leaderboard-rows"></tbody></table></div><div id="leaderboard-message" class="message"></div></div>
-    </section>
+<button type="submit" style="background:#101d35;color:white;padding:12px 18px;border:0;border-radius:8px;width:100%;">  
+  Register  
+</button>
 
-    <section class="view" data-panel="admin">
-      <h1 class="heading">Admin Dashboard</h1><p class="muted">Manage the player pool and approve student registrations.</p>
-      <div class="notice">Admin controls are displayed only after the site verifies that your signed-in profile is both approved and marked as an administrator. Database permissions must also allow the action.</div>
-      <div class="admin-layout">
-        <div class="panel">
-          <h2 class="heading" id="player-form-heading">Add a player</h2>
-          <form id="player-form">
-            <input type="hidden" id="edit-player-id">
-            <div class="field"><label for="p-name">Full name</label><input id="p-name" required maxlength="120"></div>
-            <div class="field"><label for="p-club">Club</label><select id="p-club" required><option value="">Choose club</option><option>Sky FC</option><option>Red Ikas United</option><option>Nepo Boys United</option><option>Balaclavas</option><option>Unassigned</option></select></div>
-            <div class="player-form-grid">
-              <div class="field"><label for="p-position">Position</label><select id="p-position" required><option value="GK">GK</option><option value="DEF">DEF</option><option value="MID">MID</option><option value="FWD">FWD</option></select></div>
-              <div class="field"><label for="p-level">Academic level</label><select id="p-level"><option value="">Not set</option><option value="100">100 level</option><option value="200">200 level</option><option value="300">300 level</option><option value="400">400 level</option><option value="500">500 level</option></select></div>
-              <div class="field"><label for="p-rating">Overall rating (0–99)</label><input id="p-rating" type="number" min="0" max="99" step="1" placeholder="e.g. 75"></div>
-              <div class="field"><label for="p-price">Price</label><input id="p-price" type="number" min="0.1" step="0.1" value="5.0" required></div>
-            </div>
-            <div class="field"><label><input id="p-available" type="checkbox" checked style="width:auto"> Available for selection</label></div>
-            <div class="inline-actions"><button class="btn gold" type="submit" id="save-player-button">Save player</button><button class="btn light" type="button" id="cancel-edit-button">Clear form</button></div>
-            <div id="player-admin-message" class="message"></div>
-          </form>
-        </div>
-        <div class="panel">
-          <h2 class="heading">Student approvals</h2><p class="muted">Review new registrations awaiting approval.</p>
-          <button class="btn" type="button" id="refresh-students">Refresh accounts</button>
-          <div id="approval-message" class="message"></div>
-          <div id="pending-students"></div>
-        </div>
-      </div>
-      <div class="panel"><h2 class="heading">Player list</h2><p class="muted">Edit player details or change availability. Removal is permanent, so use it carefully.</p><div class="table-wrap"><table><thead><tr><th>Name</th><th>Club</th><th>Pos.</th><th>Level</th><th>OVR</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead><tbody id="admin-player-rows"></tbody></table></div><div id="admin-list-message" class="message"></div></div>
-    </section>
-  </section>
-  <div class="footer">COLAW FANTASY · An unofficial fantasy game for COLAW JURIS LEAGUE.</div>
-</main>
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  </form>    <hr style="margin:24px 0;">    <form id="login-form">  
+    <h3>Already registered?</h3>  
+    <label for="login-email">Email address</label>  
+    <input id="login-email" name="email" type="email" required autocomplete="email"  
+      style="display:block;width:100%;padding:12px;margin:6px 0 14px;">  <label for="login-password">Password</label>  
+<input id="login-password" name="password" type="password" required autocomplete="current-password"  
+  style="display:block;width:100%;padding:12px;margin:6px 0 14px;">  
 
-const SUPABASE_URL = "https://adbjveurnwktbryfjonj.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Wr5t3wgqoVGqgiN6nG0VtQ_-SBLx-FG";
-const db = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-window.colawSupabase = db;
+<button type="submit" style="background:#d9bd70;color:#101d35;padding:12px 18px;border:0;border-radius:8px;width:100%;">  
+  Log in  
+</button>
 
-const $ = id => document.getElementById(id);
-const say = (id, message) => { $(id).textContent = message || ""; };
-let currentUser = null, currentProfile = null, players = [], squad = [], captainId = null;
-const tableName = "Players"; // Exact existing table name confirmed in Supabase.
-const clubValue = p => p.club_name || "Unassigned";
-const playerId = p => String(p.id);
-const money = n => Number(n || 0).toFixed(1);
+  </form>    <p id="auth-message" role="status" aria-live="polite"></p>  
+</section>    <script type="module">  
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";  
+  
+  const SUPABASE_URL = "https://adbjveurnwktbryfjonj.supabase.co";  
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Wr5t3wgqoVGqgiN6nG0VtQ_-SBLx-FG";  
+  
+  const supabase = createClient(  
+    SUPABASE_URL,  
+    SUPABASE_PUBLISHABLE_KEY  
+  );  
+  
+  window.colawSupabase = supabase;  
+  console.log("COLAW Fantasy connection initialized.");  
+</script>  <script>  
+const accessMessage = document.getElementById("auth-message");  
+  
+document.getElementById("register-form").addEventListener("submit", async (event) => {  
+  event.preventDefault();  
+  const form = event.currentTarget;  
+  const button = form.querySelector('button[type="submit"]');  
+  
+  button.disabled = true;  
+  accessMessage.textContent = "Creating your account...";  
+  
+  try {  
+    const fullName = document.getElementById("full-name").value.trim();  
+    const username = document.getElementById("username").value.trim();  
+    const email = document.getElementById("register-email").value.trim();  
+    const password = document.getElementById("register-password").value;  
+  
+    if (username.length < 3) {  
+      throw new Error("Your username must contain at least 3 characters.");  
+    }  
+  
+    const { data, error } = await window.colawSupabase.auth.signUp({  
+      email,  
+      password,  
+      options: {  
+        data: { full_name: fullName, username },  
+        emailRedirectTo: window.location.origin  
+      }  
+    });  
+  
+    if (error) throw error;  
+  
+    accessMessage.textContent = data.session  
+      ? "Account created! Your profile is awaiting administrator approval."  
+      : "Account created! Check your email to confirm your address. Your profile will remain pending until an administrator approves it.";  
+  
+    form.reset();  
+  } catch (error) {  
+    accessMessage.textContent = error.message || "Registration failed. Please try again.";  
+  } finally {  
+    button.disabled = false;  
+  }  
+});  
+  
+document.getElementById("login-form").addEventListener("submit", async (event) => {  
+  event.preventDefault();  
+  const form = event.currentTarget;  
+  const button = form.querySelector('button[type="submit"]');  
+  
+  button.disabled = true;  
+  accessMessage.textContent = "Signing in...";  
+  
+  try {  
+    const email = document.getElementById("login-email").value.trim();  
+    const password = document.getElementById("login-password").value;  
+  
+    const { data, error } =  
+      await window.colawSupabase.auth.signInWithPassword({ email, password });  
+  
+    if (error) throw error;  
+  
+    const { data: profile, error: profileError } =  
+      await window.colawSupabase  
+        .from("profiles")  
+        .select("is_approved")  
+        .eq("id", data.user.id)  
+        .single();  
+  
+    if (profileError) throw profileError;  
+  
+    if (!profile.is_approved) {  
+      await window.colawSupabase.auth.signOut();  
+      accessMessage.textContent =  
+        "Your account is awaiting administrator approval. Please try again later.";  
+      return;  
+    }  
+  
+    accessMessage.textContent =  
+  "Welcome back! You're signed in.";  
+  
+if (typeof window.colawFantasyInitialize === "function") {  
+  await window.colawFantasyInitialize();  
+}  
+  } catch (error) {  
+    accessMessage.textContent =  
+      error.message || "Login failed. Please check your details and try again.";  
+  } finally {  
+    button.disabled = false;  
+  }  
+});  
+</script>    <section id="admin-dashboard" style="display:none;max-width:900px;margin:30px auto;padding:20px;">  
+  <h2>COLAW Fantasy — Admin Dashboard</h2>  
+  <p>Manage student registrations and account approvals.</p>  
+  <button id="admin-refresh" type="button">Refresh accounts</button>  
+  <p id="admin-message" role="status"></p>  
+  <div id="pending-students"></div>  
+</section>  <script type="module">  
+const db = window.colawSupabase;  
+const dashboard = document.getElementById("admin-dashboard");  
+const message = document.getElementById("admin-message");  
+const list = document.getElementById("pending-students");  
+  
+async function loadAdminDashboard() {  
+  message.textContent = "Checking administrator access...";  
+  list.replaceChildren();  
+  
+  const { data: { user }, error: authError } = await db.auth.getUser();  
+  
+  if (authError || !user) {  
+    message.textContent = "Please sign in with your administrator account first.";  
+    return;  
+  }  
+  
+  const { data: profile, error } = await db  
+    .from("profiles")  
+    .select("is_admin, is_approved")  
+    .eq("id", user.id)  
+    .single();  
+  
+  if (error || !profile || profile.is_admin !== true || profile.is_approved !== true) {  
+    message.textContent = "Administrator access required.";  
+    return;  
+  }  
+  
+  dashboard.style.display = "block";  
+  message.textContent = "Administrator access confirmed. Loading pending accounts...";  
+  
+  const { data: students, error: studentsError } = await db  
+    .from("profiles")  
+    .select("id, full_name, username, created_at")  
+    .eq("is_approved", false)  
+    .order("created_at", { ascending: true });  
+  
+  if (studentsError) {  
+    message.textContent = "Could not load accounts. Check database access policies.";  
+    return;  
+  }  
+  
+  list.replaceChildren();  
+  
+  if (!students || students.length === 0) {  
+    message.textContent = "No pending student accounts.";  
+    return;  
+  }  
+  
+  message.textContent = `${students.length} account(s) awaiting approval.`;  
+  
+  for (const student of students) {  
+    const card = document.createElement("div");  
+    card.style.cssText = "padding:15px;margin:12px 0;border:1px solid #ccc;border-radius:10px";  
+  
+    const name = document.createElement("h3");  
+    name.textContent = student.full_name || student.username || "Unnamed student";  
+  
+    const username = document.createElement("p");  
+    username.textContent = `Team / username: ${student.username || "Not set"}`;  
+  
+    const approve = document.createElement("button");  
+    approve.type = "button";  
+    approve.textContent = "Approve student";  
+  
+    approve.addEventListener("click", async () => {  
+      approve.disabled = true;  
+        
+const { error: updateError } = await db.rpc("approve_student", {  
+  target_user_id: student.id  
+});  
+        
+  
+      if (updateError) {  
+        message.textContent = "Approval failed. Check the database security policies.";  
+        approve.disabled = false;  
+        return;  
+      }  
+  
+      message.textContent = "Student approved.";  
+      await loadAdminDashboard();  
+    });  
+  
+    card.append(name, username, approve);  
+    list.append(card);  
+  }  
+}  
+  
+document.getElementById("admin-refresh")  
+  .addEventListener("click", loadAdminDashboard);  
+  
+db.auth.onAuthStateChange((_event, session) => {  
+  if (session) loadAdminDashboard();  
+});  
+</script>  <!-- COLAW FANTASY DASHBOARD -->  <section id="fantasy-dashboard" style="display:none;">  
+  <style>  
+    #fantasy-dashboard {  
+      --navy: #101d35;  
+      --gold: #d9b760;  
+      --paper: #f4f6fa;  
+      --ink: #17243a;  
+      color: var(--ink);  
+      background: var(--paper);  
+      min-height: 100vh;  
+      font-family: Arial, sans-serif;  
+      margin: 0;  
+    }  
+    #fantasy-dashboard * { box-sizing: border-box; }  
+    #fantasy-dashboard .fantasy-top {  
+      background: linear-gradient(120deg,#101d35,#20395f);  
+      color: white;  
+      padding: 25px 20px;  
+      border-bottom: 4px solid var(--gold);  
+    }  
+    #fantasy-dashboard .fantasy-wrap {  
+      max-width: 1100px;  
+      margin: auto;  
+    }  
+    #fantasy-dashboard .fantasy-brand {  
+      font-size: 25px;  
+      font-weight: 900;  
+      letter-spacing: 1px;  
+    }  
+    #fantasy-dashboard .fantasy-brand span { color: var(--gold); }  
+    #fantasy-dashboard .fantasy-subtitle {  
+      color: #d8dfeb;  
+      margin-top: 7px;  
+      font-size: 13px;  
+    }  
+    #fantasy-dashboard .fantasy-nav {  
+      display: flex;  
+      gap: 9px;  
+      flex-wrap: wrap;  
+      margin-top: 22px;  
+    }  
+    #fantasy-dashboard .fantasy-nav button {  
+      border: 1px solid #52627c;  
+      background: #ffffff12;  
+      color: white;  
+      padding: 10px 14px;  
+      border-radius: 9px;  
+      cursor: pointer;  
+    }  
+    #fantasy-dashboard .fantasy-nav button.active {  
+      background: var(--gold);  
+      color: var(--navy);  
+      border-color: var(--gold);  
+      font-weight: bold;  
+    }  
+    #fantasy-dashboard .fantasy-content {  
+      max-width: 1100px;  
+      margin: auto;  
+      padding: 24px 16px 50px;  
+    }  
+    #fantasy-dashboard .fantasy-heading {  
+      font-size: 23px;  
+      color: var(--navy);  
+      margin: 0 0 8px;  
+    }  
+    #fantasy-dashboard .fantasy-muted {  
+      color: #64748b;  
+      font-size: 14px;  
+      line-height: 1.5;  
+    }  
+    #fantasy-dashboard .fantasy-stats {  
+      display: grid;  
+      grid-template-columns: repeat(auto-fit,minmax(135px,1fr));  
+      gap: 12px;  
+      margin: 22px 0;  
+    }  
+    #fantasy-dashboard .fantasy-stat {  
+      background: white;  
+      padding: 17px;  
+      border: 1px solid #e0e5ed;  
+      border-radius: 13px;  
+      box-shadow: 0 4px 15px #101d3508;  
+    }  
+    #fantasy-dashboard .fantasy-stat small {  
+      display: block;  
+      color: #64748b;  
+      margin-bottom: 9px;  
+    }  
+    #fantasy-dashboard .fantasy-stat strong {  
+      font-size: 25px;  
+      color: var(--navy);  
+    }  
+    #fantasy-dashboard .fantasy-panel {  
+      background: white;  
+      padding: 19px;  
+      border: 1px solid #e0e5ed;  
+      border-radius: 14px;  
+      margin: 16px 0;  
+      box-shadow: 0 4px 15px #101d3508;  
+    }  
+    #fantasy-dashboard .fantasy-controls {  
+      display: grid;  
+      grid-template-columns: repeat(auto-fit,minmax(150px,1fr));  
+      gap: 10px;  
+      margin: 17px 0;  
+    }  
+    #fantasy-dashboard input,  
+    #fantasy-dashboard select {  
+      width: 100%;  
+      padding: 12px;  
+      border: 1px solid #d7deea;  
+      border-radius: 9px;  
+      background: white;  
+      color: var(--ink);  
+      font-size: 14px;  
+    }  
+    #fantasy-dashboard .fantasy-btn {  
+      border: 0;  
+      border-radius: 9px;  
+      padding: 11px 15px;  
+      background: var(--navy);  
+      color: white;  
+      cursor: pointer;  
+      font-weight: bold;  
+    }  
+    #fantasy-dashboard .fantasy-btn.gold {  
+      background: var(--gold);  
+      color: var(--navy);  
+    }  
+    #fantasy-dashboard .fantasy-btn:disabled {  
+      opacity: .45;  
+      cursor: not-allowed;  
+    }  
+    #fantasy-dashboard .fantasy-table-wrap { overflow-x: auto; }  
+    #fantasy-dashboard table {  
+      border-collapse: collapse;  
+      width: 100%;  
+      font-size: 14px;  
+    }  
+    #fantasy-dashboard th {  
+      text-align: left;  
+      background: #f0f3f8;  
+      color: var(--navy);  
+      padding: 12px 10px;  
+      white-space: nowrap;  
+    }  
+    #fantasy-dashboard td {  
+      padding: 12px 10px;  
+      border-bottom: 1px solid #edf0f5;  
+    }  
+    #fantasy-dashboard .fantasy-rating {  
+      display: inline-block;  
+      background: var(--navy);  
+      color: var(--gold);  
+      font-weight: bold;  
+      padding: 5px 7px;  
+      border-radius: 6px;  
+    }  
+    #fantasy-dashboard .fantasy-pill {  
+      display: inline-block;  
+      background: #eef2f7;  
+      color: #334155;  
+      border-radius: 20px;  
+      padding: 5px 9px;  
+      font-size: 12px;  
+    }  
+    #fantasy-dashboard .fantasy-message {  
+      margin-top: 14px;  
+      padding: 12px;  
+      background: #f5f7fb;  
+      border-radius: 8px;  
+      font-size: 14px;  
+      line-height: 1.5;  
+    }  
+    #fantasy-dashboard .fantasy-message:empty { display:none; }  
+    #fantasy-dashboard .fantasy-view { display:none; }  
+    #fantasy-dashboard .fantasy-view.active { display:block; }  
+    #fantasy-dashboard .fantasy-footer {  
+      color: #64748b;  
+      font-size: 12px;  
+      text-align: center;  
+      padding: 25px 10px;  
+    }  
+    @media(max-width:550px) {  
+      #fantasy-dashboard .fantasy-top { padding: 20px 15px; }  
+      #fantasy-dashboard .fantasy-brand { font-size: 22px; }  
+      #fantasy-dashboard .fantasy-content { padding: 18px 11px 35px; }  
+      #fantasy-dashboard .fantasy-panel { padding: 13px; }  
+    }  
+  </style>    <header class="fantasy-top">  
+    <div class="fantasy-wrap">  
+      <div class="fantasy-brand">COLAW <span>FANTASY</span></div>  
+      <div class="fantasy-subtitle">JURIS LEAGUE · BUILD YOUR XI · RULE YOUR LEAGUE</div>  
+      <nav class="fantasy-nav" aria-label="Fantasy dashboard">  
+        <button type="button" class="active" data-fantasy-tab="overview">Overview</button>  
+        <button type="button" data-fantasy-tab="market">Player Market</button>  
+        <button type="button" data-fantasy-tab="squad">My Squad</button>  
+        <button type="button" data-fantasy-tab="leaderboard">Leaderboard</button>  
+      </nav>  
+    </div>  
+  </header>    <main class="fantasy-content">  
+    <section class="fantasy-view active" data-fantasy-view="overview">  
+      <h1 class="fantasy-heading">Your Fantasy Dugout</h1>  
+      <p class="fantasy-muted">Welcome to COLAW Fantasy. Discover the players, build your starting XI, and compete with fellow law students.</p>  <div class="fantasy-stats">  
+    <div class="fantasy-stat"><small>Players available</small><strong id="cf-total-players">—</strong></div>  
+    <div class="fantasy-stat"><small>Players in your squad</small><strong id="cf-squad-count">0 / 11</strong></div>  
+    <div class="fantasy-stat"><small>Squad value</small><strong id="cf-squad-value">0.0</strong></div>  
+    <div class="fantasy-stat"><small>Fantasy points</small><strong id="cf-my-points">0</strong></div>  
+  </div>  
 
-function showView(name) {
-  document.querySelectorAll("[data-panel]").forEach(s => s.classList.toggle("active", s.dataset.panel === name));
-  document.querySelectorAll("#main-nav [data-view]").forEach(b => b.classList.toggle("active", b.dataset.view === name));
-  if (name === "market") renderMarket();
-  if (name === "squad") renderSquad();
-  if (name === "admin" && isAdmin()) { loadAdminPlayers(); loadPendingStudents(); }
-}
-function isAdmin() { return !!currentProfile && currentProfile.is_admin === true && currentProfile.is_approved === true; }
-function showApp() {
-  $("auth-view").classList.add("hidden"); $("app-view").classList.remove("hidden"); $("logout-button").classList.remove("hidden");
-  $("admin-nav").classList.toggle("hidden", !isAdmin());
-}
-function showAuth() {
-  $("auth-view").classList.remove("hidden"); $("app-view").classList.add("hidden"); $("logout-button").classList.add("hidden"); $("admin-nav").classList.add("hidden");
-  document.querySelectorAll("[data-panel]").forEach(s => s.classList.remove("active"));
-}
-document.querySelectorAll("#main-nav [data-view]").forEach(b => b.addEventListener("click", () => showView(b.dataset.view)));
-document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => showView(b.dataset.go)));
-
-$("register-form").addEventListener("submit", async e => {
-  e.preventDefault(); const button = e.currentTarget.querySelector("button[type=submit]"); button.disabled = true; say("auth-message","Creating your account…");
-  try {
-    const {data,error} = await db.auth.signUp({email:$("reg-email").value.trim(),password:$("reg-password").value,options:{data:{full_name:$("reg-name").value.trim(),username:$("reg-username").value.trim()},emailRedirectTo:location.origin}});
-    if(error) throw error;
-    say("auth-message", data.session ? "Account created. Your profile is awaiting administrator approval." : "Account created. Check your email to confirm your address; an administrator must approve your profile.");
-    e.currentTarget.reset();
-  } catch(err) { say("auth-message",err.message || "Registration failed."); } finally { button.disabled=false; }
-});
-$("login-form").addEventListener("submit", async e => {
-  e.preventDefault(); const button=e.currentTarget.querySelector("button[type=submit]"); button.disabled=true; say("auth-message","Signing in…");
-  try {
-    const {data,error}=await db.auth.signInWithPassword({email:$("login-email").value.trim(),password:$("login-password").value}); if(error) throw error;
-    const {data:profile,error:pe}=await db.from("profiles").select("id,full_name,username,is_approved,is_admin").eq("id",data.user.id).single();
-    if(pe) throw pe;
-    if(!profile || profile.is_approved !== true){await db.auth.signOut();say("auth-message","Your account is awaiting administrator approval.");return;}
-    currentUser=data.user;currentProfile=profile;showApp();showView("overview");say("overview-message",`Welcome, ${profile.full_name || profile.username || "manager"}!`);
-    await loadPlayers(); await loadSquad();
-    if(isAdmin()) await loadPendingStudents();
-  } catch(err){say("auth-message",err.message || "Login failed. Check your details and try again.");} finally{button.disabled=false;}
-});
-$("logout-button").addEventListener("click", async()=>{await db.auth.signOut();currentUser=null;currentProfile=null;players=[];squad=[];captainId=null;showAuth();say("auth-message","You have been signed out.");});
-db.auth.onAuthStateChange((event,session)=>{ if(event==="SIGNED_OUT"){currentUser=null;currentProfile=null;showAuth();} });
-
-async function loadPlayers() {
-  const {data,error}=await db.from(tableName).select("id,full_name,club_name,position,level,rating,price,total_points,is_available,created_at").order("full_name");
-  if(error){say("overview-message","Couldn't load players: "+error.message);say("market-message","Check the Players table permissions: "+error.message);return;}
-  players=data||[]; $("stat-players").textContent=players.filter(p=>p.is_available).length; renderMarket(); renderAdminPlayers(); updateStats();
-}
-function renderMarket(){
-  const body=$("market-rows");body.replaceChildren();
-  const search=$("player-search").value.trim().toLowerCase(),club=$("club-filter").value,pos=$("position-filter").value;
-  const found=players.filter(p=>p.is_available===true && String(p.full_name||"").toLowerCase().includes(search) && (!club||clubValue(p)===club) && (!pos||p.position===pos));
-  if(!found.length){const r=body.insertRow(),c=r.insertCell();c.colSpan=7;c.textContent="No available players match your search.";return;}
-  found.forEach(p=>{
-    const r=body.insertRow();[p.full_name,clubValue(p),p.position,p.level==null?"—":`${p.level} level`].forEach(v=>r.insertCell().textContent=v||"—");
-    const rate=r.insertCell();if(p.rating==null)rate.textContent="—";else{const s=document.createElement("span");s.className="rating";s.textContent=p.rating;rate.append(s);}
-    r.insertCell().textContent=money(p.price);
-    const cell=r.insertCell(),b=document.createElement("button");b.className="btn gold";const added=squad.some(x=>playerId(x)===playerId(p));b.textContent=added?"Added":"Add";b.disabled=added||squad.length>=11;b.addEventListener("click",()=>addPlayer(p));cell.append(b);
-  });
-}
-function updateStats(){ $("stat-players").textContent=players.filter(p=>p.is_available).length;$("stat-squad").textContent=`${squad.length} / 11`;$("stat-value").textContent=money(squad.reduce((s,p)=>s+Number(p.price||0),0));$("stat-points").textContent=squad.reduce((s,p)=>s+Number(p.total_points||0)*(playerId(p)===String(captainId)?2:1),0); }
-async function loadSquad(){
-  // Squad table shape may differ between projects. If it does, the error is shown instead of overwriting data.
-  try {
-    const {data:squads,error}=await db.from("squads").select("id,user_id,total_points").eq("user_id",currentUser.id).limit(1);
-    if(error) throw error;
-    if(!squads?.length){squad=[];renderSquad();updateStats();return;}
-    const sid=squads[0].id;
-    const {data:items,error:ie}=await db.from("squad_players").select("*").eq("squad_id",sid);
-    if(ie) throw ie;
-    const ids=(items||[]).map(x=>String(x.player_id ?? x.players_id ?? ""));
-    squad=players.filter(p=>ids.includes(playerId(p)));
-    const captain=(items||[]).find(x=>x.is_captain===true || x.captain===true);captainId=captain?String(captain.player_id ?? captain.players_id):null;
-    renderSquad();updateStats();
-  } catch(err){say("squad-message","Squad loading needs a schema check: "+err.message);}
-}
-async function ensureSquad(){
-  const {data,error}=await db.from("squads").select("id,user_id,total_points").eq("user_id",currentUser.id).limit(1);
-  if(error) throw error;
-  if(data?.length) return data[0];
-  const {data:created,error:ce}=await db.from("squads").insert({user_id:currentUser.id,total_points:0}).select("id,user_id,total_points").single();
-  if(ce) throw ce;return created;
-}
-async function saveSquad(){
-  try{
-    const s=await ensureSquad();
-    const {error:delError}=await db.from("squad_players").delete().eq("squad_id",s.id);if(delError) throw delError;
-    if(squad.length){
-      const rows=squad.map(p=>({squad_id:s.id,player_id:p.id,is_captain:playerId(p)===String(captainId)}));
-      const {error}=await db.from("squad_players").insert(rows);if(error) throw error;
-    }
-    say("squad-message","Squad saved successfully."); 
-  }catch(err){say("squad-message","Couldn't save the squad. The database may use different squad columns or permissions: "+err.message);}
-}
-async function addPlayer(p){if(squad.length>=11){say("market-message","Your squad already has 11 players.");return;}if(squad.some(x=>playerId(x)===playerId(p)))return;squad.push(p);renderMarket();renderSquad();updateStats();await saveSquad();}
-function renderSquad(){
-  const body=$("squad-rows");body.replaceChildren();
-  if(!squad.length){const r=body.insertRow(),c=r.insertCell();c.colSpan=6;c.textContent="Your squad is empty. Visit Player Market to sign players.";}
-  squad.forEach(p=>{
-    const r=body.insertRow();[p.full_name,clubValue(p),p.position,money(p.price)].forEach(v=>r.insertCell().textContent=v||"—");
-    const cap=r.insertCell(),cb=document.createElement("button");cb.className="btn "+(String(captainId)===playerId(p)?"gold":"light");cb.textContent=String(captainId)===playerId(p)?"★ Captain":"Make captain";cb.addEventListener("click",async()=>{captainId=playerId(p);renderSquad();updateStats();await saveSquad();});cap.append(cb);
-    const ac=r.insertCell(),rm=document.createElement("button");rm.className="btn danger";rm.textContent="Remove";rm.addEventListener("click",async()=>{squad=squad.filter(x=>playerId(x)!==playerId(p));if(String(captainId)===playerId(p))captainId=null;renderSquad();renderMarket();updateStats();await saveSquad();});ac.append(rm);
-  });$("squad-count").textContent=`${squad.length} / 11`;$("squad-value").textContent=money(squad.reduce((s,p)=>s+Number(p.price||0),0));updateStats();
-}
-$("player-search").addEventListener("input",renderMarket);$("club-filter").addEventListener("change",renderMarket);$("position-filter").addEventListener("change",renderMarket);
-
-async function loadLeaderboard(){
-  const body=$("leaderboard-rows");body.replaceChildren();
-  try{
-    const {data:squads,error}=await db.from("squads").select("user_id,total_points");if(error)throw error;
-    const {data:profiles,error:pe}=await db.from("profiles").select("id,full_name,username").eq("is_approved",true);if(pe)throw pe;
-    const names=new Map((profiles||[]).map(p=>[p.id,p.full_name||p.username||"Manager"])),totals=new Map();
-    (squads||[]).forEach(s=>totals.set(s.user_id,(totals.get(s.user_id)||0)+Number(s.total_points||0)));
-    const rows=Array.from(totals.entries()).map(([id,points])=>({name:names.get(id)||"Manager",points})).sort((a,b)=>b.points-a.points);
-    if(!rows.length){const r=body.insertRow(),c=r.insertCell();c.colSpan=3;c.textContent="The leaderboard will appear as managers earn points.";return;}
-    rows.forEach((x,i)=>{const r=body.insertRow();[i+1,x.name,x.points].forEach(v=>r.insertCell().textContent=v);});
-  }catch(err){say("leaderboard-message","Leaderboard unavailable: "+err.message);}
-}
-const origShowView=showView;
-document.querySelector('[data-view="leaderboard"]').addEventListener("click",loadLeaderboard);
-
-function clearPlayerForm(){ $("player-form").reset();$("edit-player-id").value="";$("p-price").value="5.0";$("p-available").checked=true;$("player-form-heading").textContent="Add a player";$("save-player-button").textContent="Save player"; }
-$("cancel-edit-button").addEventListener("click",clearPlayerForm);
-$("player-form").addEventListener("submit",async e=>{
- e.preventDefault();if(!isAdmin()){say("player-admin-message","Administrator access required.");return;}
- const id=$("edit-player-id").value;
- const rating=$("p-rating").value===""?null:Number($("p-rating").value),level=$("p-level").value===""?null:Number($("p-level").value);
- const record={full_name:$("p-name").value.trim(),club_name:$("p-club").value,position:$("p-position").value,level,rating,price:Number($("p-price").value),is_available:$("p-available").checked};
- if(rating!==null&&(rating<0||rating>99)){say("player-admin-message","Rating must be between 0 and 99.");return;}
- if(level!==null&&![100,200,300,400,500].includes(level)){say("player-admin-message","Choose a valid academic level.");return;}
- const b=$("save-player-button");b.disabled=true;say("player-admin-message","Saving player…");
- try{
-   const result=id?await db.from(tableName).update(record).eq("id",id):await db.from(tableName).insert(record);
-   if(result.error)throw result.error;
-   say("player-admin-message",id?"Player updated.":"Player added.");clearPlayerForm();await loadPlayers();
- }catch(err){say("player-admin-message","Couldn't save player: "+err.message+". Check RLS/table permissions for public.Players.");}
- finally{b.disabled=false;}
-});
-async function loadAdminPlayers(){
- if(!isAdmin())return;
- const {data,error}=await db.from(tableName).select("id,full_name,club_name,position,level,rating,price,total_points,is_available").order("full_name");
- if(error){say("admin-list-message","Could not load players: "+error.message);return;}players=data||[];renderAdminPlayers();renderMarket();updateStats();
-}
-function renderAdminPlayers(){
- const body=$("admin-player-rows");if(!body)return;body.replaceChildren();
- players.forEach(p=>{
-  const r=body.insertRow();[p.full_name,clubValue(p),p.position,p.level==null?"—":p.level,p.rating==null?"—":p.rating,money(p.price),p.is_available?"Available":"Unavailable"].forEach(v=>r.insertCell().textContent=v);
-  const cell=r.insertCell(),wrap=document.createElement("div");wrap.className="inline-actions";
-  const edit=document.createElement("button");edit.className="btn light";edit.textContent="Edit";edit.addEventListener("click",()=>{$("edit-player-id").value=p.id;$("p-name").value=p.full_name||"";$("p-club").value=p.club_name||"Unassigned";$("p-position").value=p.position||"MID";$("p-level").value=p.level??"";$("p-rating").value=p.rating??"";$("p-price").value=p.price??5;$("p-available").checked=p.is_available!==false;$("player-form-heading").textContent="Edit player";$("save-player-button").textContent="Update player";window.scrollTo({top:0,behavior:"smooth"});});
-  const toggle=document.createElement("button");toggle.className="btn";toggle.textContent=p.is_available?"Mark unavailable":"Mark available";toggle.addEventListener("click",async()=>{if(!isAdmin())return;const {error}=await db.from(tableName).update({is_available:!p.is_available}).eq("id",p.id);if(error){say("admin-list-message","Availability update failed: "+error.message);return;}await loadPlayers();say("admin-list-message","Player availability updated.");});
-  const del=document.createElement("button");del.className="btn danger";del.textContent="Delete";del.addEventListener("click",async()=>{if(!isAdmin())return;if(!confirm(`Permanently delete ${p.full_name}? This cannot be undone.`))return;const {error}=await db.from(tableName).delete().eq("id",p.id);if(error){say("admin-list-message","Delete failed: "+error.message);return;}await loadPlayers();say("admin-list-message","Player deleted.");});
-  wrap.append(edit,toggle,del);cell.append(wrap);
- });
-}
-async function loadPendingStudents(){
- if(!isAdmin())return;const list=$("pending-students");list.replaceChildren();say("approval-message","Loading pending registrations…");
- const {data,error}=await db.from("profiles").select("id,full_name,username,created_at").eq("is_approved",false).order("created_at",{ascending:true});
- if(error){say("approval-message","Could not load registrations: "+error.message);return;}
- if(!data?.length){say("approval-message","No pending student accounts.");return;}
- say("approval-message",`${data.length} account(s) awaiting approval.`);
- data.forEach(s=>{
-  const card=document.createElement("div");card.style.cssText="padding:13px;margin:10px 0;border:1px solid #e1e6ef;border-radius:10px";
-  const title=document.createElement("strong");title.textContent=s.full_name||s.username||"Unnamed student";
-  const sub=document.createElement("p");sub.className="muted";sub.textContent=`Team/username: ${s.username||"Not set"}`;
-  const b=document.createElement("button");b.className="btn gold";b.textContent="Approve student";b.addEventListener("click",async()=>{b.disabled=true;try{const {error:ae}=await db.rpc("approve_student",{target_user_id:s.id});if(ae)throw ae;say("approval-message","Student approved.");await loadPendingStudents();}catch(err){say("approval-message","Approval failed: "+err.message);}finally{b.disabled=false;}});
-  card.append(title,sub,b);list.append(card);
- });
-}
-$("refresh-students").addEventListener("click",loadPendingStudents);
-
-async function initializeSession(){
- const {data:{session},error}=await db.auth.getSession();if(error){say("auth-message",error.message);return;}if(!session){showAuth();return;}
- try{
-  const {data:profile,error:pe}=await db.from("profiles").select("id,full_name,username,is_approved,is_admin").eq("id",session.user.id).single();if(pe)throw pe;
-  if(!profile?.is_approved){await db.auth.signOut();say("auth-message","Your account is awaiting administrator approval.");return;}
-  currentUser=session.user;currentProfile=profile;showApp();showView("overview");say("overview-message",`Welcome, ${profile.full_name||profile.username||"manager"}!`);
-  await loadPlayers();await loadSquad();await loadLeaderboard();if(isAdmin())await loadPendingStudents();
- }catch(err){showAuth();say("auth-message","Could not load your profile: "+err.message);}
-}
-initializeSession();
-</script>
-</body>
-</html>
+  <div class="fantasy-panel">  
+    <h2 class="fantasy-heading">Your season starts here</h2>  
+    <p class="fantasy-muted">Explore the player market, check each player's club, positio
