@@ -271,7 +271,11 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
     }
 
     accessMessage.textContent =
-      "Welcome back! You're signed in.";
+  "Welcome back! You're signed in.";
+
+if (typeof window.colawFantasyInitialize === "function") {
+  await window.colawFantasyInitialize();
+}
   } catch (error) {
     accessMessage.textContent =
       error.message || "Login failed. Please check your details and try again.";
