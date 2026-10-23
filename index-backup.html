@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101d35">
+  <title>COLAW Fantasy | Juris League</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f5f9;
+      color: #15233d;
+    }
+    header {
+      background: #101d35;
+      color: white;
+      padding: 22px 18px;
+      border-bottom: 4px solid #d7b568;
+    }
+    .brand {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .brand span { color: #e4c77e; }
+    header p { color: #c5ccda; margin-bottom: 0; }
+    main {
+      max-width: 760px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #152b4a, #176449);
+      color: white;
+      border-radius: 16px;
+      padding: 28px 22px;
+    }
+    .hero small {
+      color: #e4c77e;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    h1 { font-size: 30px; margin: 12px 0; }
+    .hero p { line-height: 1.6; color: #e1e9e8; }
+    .button {
+      display: inline-block;
+      background: #e4c77e;
+      color: #15233d;
+      padding: 13px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 8px;
+    }
+    .section-title { margin: 28px 0 14px; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: white;
+      border: 1px solid #e0e5ed;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .card .emoji { font-size: 25px; }
+    .card h3 { margin: 12px 0 6px; }
+    .card p { font-size: 14px; line-height: 1.5; color: #657187; }
+    footer {
+      text-align: center;
+      color: #778196;
+      padding: 28px 16px;
+      font-size: 13px;
+    }
+    @media (max-width: 440px) {
+      .cards { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">COLAW <span>FANTASY</span></div>
+    <p>JURIS LEAGUE · SEASON 2026</p>
+  </header>
+
+  <main>
+    <section class="hero">
+      <small>YOUR COLLEGE. YOUR LEAGUE.</small>
+      <h1>Welcome to COLAW Fantasy.</h1>
+      <p>
+        Build your dream squad, choose your captain,
+        earn fantasy points and compete with your
+        fellow law students for the top spot.
+      </p>
+      <a class="button" href="#features">Explore the League ↓</a>
+    </section>
+
+    <h2 class="section-title" id="features">The Fantasy Experience</h2>
+    <section class="cards">
+      <article class="card">
+        <div class="emoji">⚽</div>
+        <h3>Pick Your Squad</h3>
+        <p>Choose players from the clubs competing in the COLAW JURIS LEAGUE.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">👑</div>
+        <h3>Choose Your Captain</h3>
+        <p>Back your star player and make every gameweek count.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">🏆</div>
+        <h3>Global Leaderboard</h3>
+        <p>Compete against classmates and climb the fantasy rankings.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">📊</div>
+        <h3>Track Your Points</h3>
+        <p>Follow your weekly scores and season performance.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    COLAW FANTASY · An unofficial fantasy game for COLAW JURIS LEAGUE.
+  </footer>
+
+
+<!-- COLAW Fantasy student access -->
+<section id="student-access" style="max-width:600px;margin:30px auto;padding:24px;background:white;border-radius:16px;box-shadow:0 4px 18px #0001;">
+  <h2 style="color:#101d35;">Student Access</h2>
+  <p>Register for COLAW Fantasy or log in to your account.</p>
+
+  <form id="register-form">
+    <h3>Create an account</h3>
+    <label for="full-name">Full name</label>
+    <input id="full-name" name="full_name" required maxlength="100"
+      autocomplete="name" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <label for="username">Fantasy team name / username</label>
+    <input id="username" name="username" required minlength="3" maxlength="30"
+      autocomplete="username" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <label for="register-email">Email address</label>
+    <input id="register-email" name="email" type="email" required
+      autocomplete="email" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <label for="register-password">Password (at least 8 characters)</label>
+    <input id="register-password" name="password" type="password" required minlength="8"
+      autocomplete="new-password" style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <button type="submit" style="background:#101d35;color:white;padding:12px 18px;border:0;border-radius:8px;width:100%;">
+      Register
+    </button>
+  </form>
+
+  <hr style="margin:24px 0;">
+
+  <form id="login-form">
+    <h3>Already registered?</h3>
+    <label for="login-email">Email address</label>
+    <input id="login-email" name="email" type="email" required autocomplete="email"
+      style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <label for="login-password">Password</label>
+    <input id="login-password" name="password" type="password" required autocomplete="current-password"
+      style="display:block;width:100%;padding:12px;margin:6px 0 14px;">
+
+    <button type="submit" style="background:#d9bd70;color:#101d35;padding:12px 18px;border:0;border-radius:8px;width:100%;">
+      Log in
+    </button>
+  </form>
+
+  <p id="auth-message" role="status" aria-live="polite"></p>
+</section>
+  
+  <script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://adbjveurnwktbryfjonj.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Wr5t3wgqoVGqgiN6nG0VtQ_-SBLx-FG";
+
+  const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  window.colawSupabase = supabase;
+  console.log("COLAW Fantasy connection initialized.");
+</script>
+  
+<script>
+const accessMessage = document.getElementById("auth-message");
+
+document.getElementById("register-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+
+  button.disabled = true;
+  accessMessage.textContent = "Creating your account...";
+
+  try {
+    const fullName = document.getElementById("full-name").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const password = document.getElementById("register-password").value;
+
+    if (username.length < 3) {
+      throw new Error("Your username must contain at least 3 characters.");
+    }
+
+    const { data, error } = await window.colawSupabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName, username },
+        emailRedirectTo: window.location.origin
+      }
+    });
+
+    if (error) throw error;
+
+    accessMessage.textContent = data.session
+      ? "Account created! Your profile is awaiting administrator approval."
+      : "Account created! Check your email to confirm your address. Your profile will remain pending until an administrator approves it.";
+
+    form.reset();
+  } catch (error) {
+    accessMessage.textContent = error.message || "Registration failed. Please try again.";
+  } finally {
+    button.disabled = false;
+  }
+});
+
+document.getElementById("login-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+
+  button.disabled = true;
+  accessMessage.textContent = "Signing in...";
+
+  try {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    const { data, error } =
+      await window.colawSupabase.auth.signInWithPassword({ email, password });
+
+    if (error) throw error;
+
+    const { data: profile, error: profileError } =
+      await window.colawSupabase
+        .from("profiles")
+        .select("is_approved")
+        .eq("id", data.user.id)
+        .single();
+
+    if (profileError) throw profileError;
+
+    if (!profile.is_approved) {
+      await window.colawSupabase.auth.signOut();
+      accessMessage.textContent =
+        "Your account is awaiting administrator approval. Please try again later.";
+      return;
+    }
+
+    accessMessage.textContent =
+      "Welcome back! You're signed in. The fantasy dashboard is our next step.";
+  } catch (error) {
+    accessMessage.textContent =
+      error.message || "Login failed. Please check your details and try again.";
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+
+  <section id="admin-dashboard" style="display:none;max-width:900px;margin:30px auto;padding:20px;">
+  <h2>COLAW Fantasy — Admin Dashboard</h2>
+  <p>Manage student registrations and account approvals.</p>
+  <button id="admin-refresh" type="button">Refresh accounts</button>
+  <p id="admin-message" role="status"></p>
+  <div id="pending-students"></div>
+</section>
+
+<script type="module">
+const db = window.colawSupabase;
+const dashboard = document.getElementById("admin-dashboard");
+const message = document.getElementById("admin-message");
+const list = document.getElementById("pending-students");
+
+async function loadAdminDashboard() {
+  message.textContent = "Checking administrator access...";
+  list.replaceChildren();
+
+  const { data: { user }, error: authError } = await db.auth.getUser();
+
+  if (authError || !user) {
+    message.textContent = "Please sign in with your administrator account first.";
+    return;
+  }
+
+  const { data: profile, error } = await db
+    .from("profiles")
+    .select("is_admin, is_approved")
+    .eq("id", user.id)
+    .single();
+
+  if (error || !profile || profile.is_admin !== true || profile.is_approved !== true) {
+    message.textContent = "Administrator access required.";
+    return;
+  }
+
+  dashboard.style.display = "block";
+  message.textContent = "Administrator access confirmed. Loading pending accounts...";
+
+  const { data: students, error: studentsError } = await db
+    .from("profiles")
+    .select("id, full_name, username, created_at")
+    .eq("is_approved", false)
+    .order("created_at", { ascending: true });
+
+  if (studentsError) {
+    message.textContent = "Could not load accounts. Check database access policies.";
+    return;
+  }
+
+  list.replaceChildren();
+
+  if (!students || students.length === 0) {
+    message.textContent = "No pending student accounts.";
+    return;
+  }
+
+  message.textContent = `${students.length} account(s) awaiting approval.`;
+
+  for (const student of students) {
+    const card = document.createElement("div");
+    card.style.cssText = "padding:15px;margin:12px 0;border:1px solid #ccc;border-radius:10px";
+
+    const name = document.createElement("h3");
+    name.textContent = student.full_name || student.username || "Unnamed student";
+
+    const username = document.createElement("p");
+    username.textContent = `Team / username: ${student.username || "Not set"}`;
+
+    const approve = document.createElement("button");
+    approve.type = "button";
+    approve.textContent = "Approve student";
+
+    approve.addEventListener("click", async () => {
+      approve.disabled = true;
+      
+const { error: updateError } = await db.rpc("approve_student", {
+  target_user_id: student.id
+});
+      
+
+      if (updateError) {
+        message.textContent = "Approval failed. Check the database security policies.";
+        approve.disabled = false;
+        return;
+      }
+
+      message.textContent = "Student approved.";
+      await loadAdminDashboard();
+    });
+
+    card.append(name, username, approve);
+    list.append(card);
+  }
+}
+
+document.getElementById("admin-refresh")
+  .addEventListener("click", loadAdminDashboard);
+
+db.auth.onAuthStateChange((_event, session) => {
+  if (session) loadAdminDashboard();
+});
+</script>
+  
+  
+</body>
+</html>
